@@ -5,6 +5,9 @@ node_modules
 out
 dist
 *.tgz
+results/
+music_scores/
+music_scores_no_meta/
 
 # code coverage
 coverage

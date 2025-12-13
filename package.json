@@ -3,10 +3,19 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "benchmark": "bun run index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@openrouter/ai-sdk-provider": "^1.5.3",
+    "ai": "^5.0.113",
+    "zod": "^4.1.13"
   }
 }
