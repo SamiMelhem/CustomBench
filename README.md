@@ -1,5 +1,18 @@
 # CustomBench - LLM Benchmark Runner
 
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1.3.4-000000?style=for-the-badge&logo=bun&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-API-FF6B6B?style=for-the-badge)](https://openrouter.ai)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+</div>
+
 A full-featured web application and CLI tool for running benchmarks on Large Language Models (LLMs) via OpenRouter. Built with Next.js, React, Bun, and TypeScript, it provides an intuitive web interface for testing LLM performance on custom question-answer datasets with live progress tracking and detailed results analysis.
 
 ## Features
@@ -204,4 +217,4 @@ bun run lint
 
 ## License
 
-Private project - All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
