@@ -1,6 +1,0 @@
-{
-    "setup-worktree": [
-        "bun install",
-        "Copy-Item \"$ROOT_WORKTREE_PATH\\.env\" -Destination .env"
-    ]
-}
