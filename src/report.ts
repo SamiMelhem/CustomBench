@@ -1,39 +1,95 @@
 /**
  * Persistence and reporting for benchmark results
  */
-import type { RunOutput } from "./types.ts";
+import { mkdir, writeFile, readdir, readFile } from "node:fs/promises";
+import path from "node:path";
+import type { RunOutput, SavedResult } from "./types.ts";
 
-const RESULTS_DIR = "results";
+export const RESULTS_DIR = "results";
 
 /** Ensure the results directory exists */
 async function ensureResultsDir(): Promise<void> {
-  const dir = Bun.file(RESULTS_DIR);
   try {
-    await Bun.$`mkdir -p ${RESULTS_DIR}`;
+    await mkdir(path.join(process.cwd(), RESULTS_DIR), { recursive: true });
   } catch {
     // Directory likely already exists
   }
 }
 
 /** Generate a filename for the results */
-function generateFilename(output: RunOutput): string {
+function generateFilename(output: RunOutput, benchmarkId?: string): string {
+  const benchmarkSlug = benchmarkId ?? "unknown";
   const modelSlug = output.summary.model.id.replace(/\//g, "-");
   const timestamp = output.summary.timestamp.replace(/[:.]/g, "-");
-  return `${RESULTS_DIR}/${modelSlug}_${timestamp}.json`;
+  return `${benchmarkSlug}_${modelSlug}_${timestamp}.json`;
 }
 
 /** Save run results to a JSON file */
-export async function saveResults(output: RunOutput): Promise<string> {
+export async function saveResults(
+  output: RunOutput & { benchmarkId?: string },
+  benchmarkId?: string
+): Promise<string> {
   await ensureResultsDir();
 
-  const filename = generateFilename(output);
-  const json = JSON.stringify(output, null, 2);
+  const filename = generateFilename(output, benchmarkId ?? output.benchmarkId);
 
-  await Bun.write(filename, json);
+  // Include benchmarkId in the saved output
+  const outputToSave = {
+    ...output,
+    benchmarkId: benchmarkId ?? output.benchmarkId ?? "unknown",
+  };
 
-  console.log(`\n📁 Results saved to ${filename}`);
+  const json = JSON.stringify(outputToSave, null, 2);
+  const abs = path.join(process.cwd(), RESULTS_DIR, filename);
+  await writeFile(abs, json, "utf-8");
+
+  console.log(`\n📁 Results saved to ${path.join(RESULTS_DIR, filename)}`);
 
   return filename;
+}
+
+/** List saved result files (newest first) with parsed data */
+export async function listResults(): Promise<{ filename: string; output: SavedResult }[]> {
+  const dirAbs = path.join(process.cwd(), RESULTS_DIR);
+  try {
+    const entries = await readdir(dirAbs, { withFileTypes: true });
+    const files = entries
+      .filter((e) => e.isFile() && e.name.endsWith(".json"))
+      .map((e) => e.name)
+      .sort()
+      .reverse();
+
+    const outputs: { filename: string; output: SavedResult }[] = [];
+    for (const filename of files) {
+      try {
+        const raw: unknown = JSON.parse(
+          await readFile(path.join(dirAbs, filename), "utf8")
+        );
+        if (typeof raw === "object" && raw !== null) {
+          outputs.push({ filename, output: raw as SavedResult });
+        }
+      } catch {
+        // ignore malformed files
+      }
+    }
+
+    return outputs;
+  } catch {
+    return [];
+  }
+}
+
+/** Load a specific result output by filename */
+export async function loadResult(filename: string): Promise<SavedResult> {
+  if (typeof filename !== "string" || filename.trim() === "") {
+    throw new Error("Invalid result filename");
+  }
+  const safe = path.basename(filename);
+  if (!safe.endsWith(".json")) throw new Error("Invalid result filename");
+
+  const abs = path.join(process.cwd(), RESULTS_DIR, safe);
+  const raw: unknown = JSON.parse(await readFile(abs, "utf8"));
+  return raw as SavedResult;
 }
 
 /** Print a console summary of the run */

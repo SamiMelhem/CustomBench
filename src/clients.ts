@@ -84,7 +84,7 @@ MODEL'S ANSWER: ${modelAnswer}`;
     });
 
     return object;
-  } catch (structuredError) {
+  } catch {
     // Fallback: generateText + manual JSON parsing (for models that don't support structured output)
     console.warn(`⚠ Structured output failed, falling back to text parsing`);
 
