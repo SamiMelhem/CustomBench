@@ -9,6 +9,13 @@ music_scores/
 music_scores_no_meta/
 results/
 
+# Next.js
+.next/
+
+# User uploads (runtime)
+uploads/*
+!uploads/.gitkeep
+
 # code coverage
 coverage
 *.lcov
