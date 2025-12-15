@@ -5,9 +5,9 @@ node_modules
 out
 dist
 *.tgz
-results/
 music_scores/
 music_scores_no_meta/
+results/
 
 # code coverage
 coverage
@@ -35,6 +35,3 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
-
-# specific files
-remove_metadata.py
