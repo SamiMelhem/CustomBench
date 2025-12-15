@@ -21,8 +21,10 @@ A full-featured web application and CLI tool for running benchmarks on Large Lan
 - 📊 **Dashboard**: View available benchmarks and recent results at a glance
 - 🚀 **Live Execution**: Stream benchmark progress in real-time with Server-Sent Events (SSE)
 - 📤 **Custom Benchmarks**: Upload your own Q&A datasets via the web UI
-- 🔍 **Results Analysis**: View detailed results with per-question verdicts and accuracy metrics
-- 🎯 **Multi-Model Support**: Test multiple models simultaneously
+- 🔍 **Results Analysis**: Detailed results with per-question verdicts, accuracy metrics, and winner highlighting
+- 🎯 **Multi-Model Testing**: Run multiple models simultaneously in a single benchmark session
+- 🏆 **Leaderboard View**: Results grouped by benchmark with trophy indicators for best-performing models
+- ⏹️ **Run Control**: Stop running benchmarks at any time with cancel functionality
 - 💻 **CLI Support**: Still works as a command-line tool for automation
 - 🎨 **Dark Mode**: Built-in dark mode support
 
@@ -58,10 +60,18 @@ bun run dev
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
 **Web Features:**
-- **Dashboard** (`/`): Browse available benchmarks and view recent results
+- **Dashboard** (`/`): Browse available benchmarks and view recent results summary
 - **Run** (`/run`): Configure and run benchmarks with live progress
+  - Select multiple models to test simultaneously
+  - Choose your preferred LLM judge model
+  - Stop/cancel runs at any time
+  - Auto-saves consolidated results when all models complete
 - **Upload** (`/upload`): Upload custom benchmark datasets
-- **Results** (`/results`): View and filter all saved benchmark results
+- **Results** (`/results`): Comprehensive results browser
+  - Grouped by benchmark with expandable run cards
+  - Shows judge model used for each run
+  - Trophy indicators for best-performing models
+  - Detailed per-question breakdowns with verdicts
 
 ### CLI (Alternative)
 
@@ -127,13 +137,21 @@ You can add custom benchmarks in two ways:
 ## Output
 
 Results are saved to `results/` with the filename format:
+
+**Multi-model runs (web UI):**
+```
+{benchmark-id}_{model-count}models_{timestamp}.json
+```
+
+**Single-model runs (CLI):**
 ```
 {benchmark-id}_{model-id}_{timestamp}.json
 ```
 
 Each result file contains:
-- Run summary (model, judge, accuracy, timestamp, benchmark info)
-- Per-question results (question, expected answer, model answer, verdict, rationale)
+- **Multi-run format**: Benchmark info, judge model, timestamp, and an array of all model results
+- **Single-run format**: Run summary with model, judge, accuracy, timestamp, and benchmark info
+- **Per-question results**: Question, expected answer, model answer, verdict (correct/incorrect), and judge rationale
 
 ## Project Structure
 
@@ -142,13 +160,18 @@ Each result file contains:
 │   ├── api/               # API routes
 │   │   ├── benchmarks/   # Benchmark listing & upload
 │   │   ├── models/       # Model listing from OpenRouter
-│   │   └── run/          # Benchmark execution endpoint
+│   │   ├── results/      # Results listing & loading
+│   │   ├── run/          # Benchmark execution endpoint (SSE)
+│   │   └── save-results/ # Consolidated results saving
 │   ├── components/       # React components
 │   │   ├── BenchmarkCard.tsx
-│   │   ├── LiveRunner.tsx
+│   │   ├── LiveRunner.tsx  # Real-time benchmark runner
 │   │   ├── ModelSelector.tsx
 │   │   ├── ProgressBar.tsx
 │   │   └── ResultsTable.tsx
+│   ├── lib/              # Shared utilities
+│   │   └── styles.ts     # Consistent styling constants
+│   ├── results/          # Results page
 │   ├── run/              # Run benchmark page
 │   ├── upload/           # Upload benchmark page
 │   ├── layout.tsx        # Root layout
@@ -162,7 +185,7 @@ Each result file contains:
 │   ├── data.ts           # Dataset loading and validation
 │   ├── clients.ts        # OpenRouter API clients
 │   ├── runner.ts         # Benchmark execution logic
-│   └── report.ts         # Results persistence
+│   └── report.ts         # Results persistence (single & multi-run)
 ├── index.ts              # CLI entry point
 └── results/              # JSON output files (auto-created)
 ```
@@ -190,11 +213,21 @@ The judge uses Vercel AI SDK's `generateObject()` with a Zod schema for reliable
 
 ### Live Progress
 
-The web interface uses Server-Sent Events (SSE) to stream real-time progress updates, showing:
-- Current question being processed
-- Completed questions count
-- Live results as they come in
-- Final summary when complete
+The web interface uses Server-Sent Events (SSE) to stream real-time progress updates:
+- Current question being processed per model
+- Completed questions count with progress bar
+- Live results table as answers come in
+- Final summary with accuracy metrics when complete
+- Cancel/stop functionality at any time
+- 30-minute timeout protection for long-running benchmarks
+
+### Multi-Model Runs
+
+When testing multiple models simultaneously:
+- Each model runs independently with its own progress tracker
+- Results are collected and saved to a single consolidated JSON file
+- The results page shows all models from the same run grouped together
+- Winner (highest accuracy) is highlighted with a trophy indicator
 
 ## Development
 

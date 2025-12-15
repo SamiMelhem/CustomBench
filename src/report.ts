@@ -48,6 +48,45 @@ export async function saveResults(
   return filename;
 }
 
+/** Save multi-run results (multiple models in one file) */
+export async function saveMultiRunResults(
+  runs: RunOutput[],
+  benchmarkId: string,
+  benchmarkName: string,
+  judge: { id: string; name: string }
+): Promise<string> {
+  await ensureResultsDir();
+
+  const timestamp = new Date().toISOString();
+  const modelCount = runs.length;
+  const timestampSlug = timestamp.replace(/[:.]/g, "-");
+  const filename = `${benchmarkId}_${modelCount}models_${timestampSlug}.json`;
+
+  const multiOutput = {
+    kind: "multi" as const,
+    benchmarkId,
+    benchmarkName,
+    judge,
+    timestamp,
+    runs: runs.map((run) => ({
+      ...run,
+      summary: {
+        ...run.summary,
+        benchmarkId,
+        benchmarkName,
+      },
+    })),
+  };
+
+  const json = JSON.stringify(multiOutput, null, 2);
+  const abs = path.join(process.cwd(), RESULTS_DIR, filename);
+  await writeFile(abs, json, "utf-8");
+
+  console.log(`\n📁 Multi-run results saved to ${path.join(RESULTS_DIR, filename)}`);
+
+  return filename;
+}
+
 /** List saved result files (newest first) with parsed data */
 export async function listResults(): Promise<{ filename: string; output: SavedResult }[]> {
   const dirAbs = path.join(process.cwd(), RESULTS_DIR);

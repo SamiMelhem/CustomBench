@@ -1,7 +1,6 @@
-import { loadDataset } from "../../../src/data";
+import { loadDataset, getBenchmarkInfo } from "../../../src/data";
 import { runBenchmark, type ProgressEvent } from "../../../src/runner";
-import { saveResults } from "../../../src/report";
-import type { ModelConfig, RunOutput } from "../../../src/types";
+import type { ModelConfig } from "../../../src/types";
 
 interface RunRequest {
   benchmarkId: string;
@@ -29,8 +28,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Load the benchmark data
+    // Load the benchmark data and info
     const items = await loadDataset(benchmarkId);
+    const benchmarkInfo = await getBenchmarkInfo(benchmarkId);
+    const benchmarkName = benchmarkInfo?.name || benchmarkId;
 
     // Model configurations
     const model: ModelConfig = {
@@ -55,15 +56,21 @@ export async function POST(request: Request) {
         try {
           const output = await runBenchmark(items, model, judge, sendEvent);
 
-          // Add benchmark info to the output for categorization
-          const outputWithBenchmark: RunOutput & { benchmarkId: string } = {
-            ...output,
+          // Send the complete output for collection (saving happens when all models complete)
+          const completeEvent = {
+            type: "run_complete",
+            output: {
+              ...output,
+              summary: {
+                ...output.summary,
+                benchmarkId,
+                benchmarkName,
+              },
+            },
             benchmarkId,
+            benchmarkName,
           };
-
-          // Save the results to disk
-          const filename = await saveResults(outputWithBenchmark, benchmarkId);
-          console.log(`Results saved to ${filename}`);
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(completeEvent)}\n\n`));
 
           controller.close();
         } catch (error) {

@@ -90,28 +90,40 @@ export async function runBenchmark(
   onProgress?.({ type: "start", total: items.length });
 
   const results: ItemResult[] = [];
+  const processedIndices = new Set<number>();
   let correctCount = 0;
 
   for (const item of items) {
+    // Skip if already processed (safety check)
+    if (processedIndices.has(item.index)) {
+      console.warn(`⚠ Skipping duplicate item at index ${item.index}`);
+      continue;
+    }
+
     process.stdout.write(`[${item.index + 1}/${items.length}] ${item.question.slice(0, 50)}... `);
 
     const result = await runItem(item, modelConfig, judgeConfig);
-    results.push(result);
+    
+    // Double-check we haven't already processed this index
+    if (!processedIndices.has(item.index)) {
+      results.push(result);
+      processedIndices.add(item.index);
 
-    if (result.verdict.correct) {
-      correctCount++;
-      console.log("✓");
-    } else {
-      console.log("✗");
+      if (result.verdict.correct) {
+        correctCount++;
+        console.log("✓");
+      } else {
+        console.log("✗");
+      }
+
+      // Emit item complete event
+      onProgress?.({
+        type: "item_complete",
+        current: item.index + 1,
+        total: items.length,
+        result,
+      });
     }
-
-    // Emit item complete event
-    onProgress?.({
-      type: "item_complete",
-      current: item.index + 1,
-      total: items.length,
-      result,
-    });
   }
 
   const summary: RunSummary = {

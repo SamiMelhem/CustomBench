@@ -101,6 +101,26 @@ async function loadBenchmarkInfo(
   };
 }
 
+/** Get benchmark info by ID */
+export async function getBenchmarkInfo(benchmarkId: string): Promise<BenchmarkListing | null> {
+  // Try benchmarks directory first, then uploads
+  const dirs = [BENCHMARKS_DIR, UPLOADS_DIR];
+  
+  for (const dir of dirs) {
+    const benchmarkPath = join(dir, benchmarkId);
+    const source = dir === BENCHMARKS_DIR ? "builtin" : "uploaded";
+    
+    try {
+      const info = await loadBenchmarkInfo(benchmarkId, benchmarkPath, source);
+      if (info) return info;
+    } catch {
+      // Continue to next directory
+    }
+  }
+  
+  return null;
+}
+
 /** Load and validate a specific benchmark dataset */
 export async function loadDataset(benchmarkId: string): Promise<BenchmarkItem[]> {
   // Try benchmarks directory first, then uploads
