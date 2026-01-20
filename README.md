@@ -2,11 +2,11 @@
 
 <div align="center">
 
-![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16.1.4-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Bun](https://img.shields.io/badge/Bun-1.3.4-000000?style=for-the-badge&logo=bun&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1.3.6-000000?style=for-the-badge&logo=bun&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.19-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 [![OpenRouter](https://img.shields.io/badge/OpenRouter-API-FF6B6B?style=for-the-badge)](https://openrouter.ai)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
@@ -201,7 +201,7 @@ You can use any model available on [OpenRouter](https://openrouter.ai/models). T
 
 ### Architecture
 
-- **Framework**: Next.js 16 with App Router
+- **Framework**: Next.js 16.1.4 with App Router
 - **Runtime**: Bun (faster than Node.js)
 - **Styling**: Tailwind CSS with dark mode support
 - **Type Safety**: Full TypeScript with strict mode
