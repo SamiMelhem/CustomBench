@@ -1,0 +1,12 @@
+{
+  "questions": [
+    "Refactor this JavaScript for‑loop into an array .map() call: \n\nlet result = [];\nfor (let i = 0; i < arr.length; i++) {\n  result.push(arr[i] * 2);\n}\nreturn result;",
+    "Replace var with const/let and arrow function: \n\nvar add = function(a, b) {\n  return a + b;\n};",
+    "Extract the duplicated code into a helper function: \n\nfunction foo(x) { console.log('start'); console.log(x); console.log('end'); }\nfunction bar(y) { console.log('start'); console.log(y); console.log('end'); }"
+  ],
+  "answers": [
+    "const result = arr.map(v => v * 2);",
+    "const add = (a, b) => a + b;",
+    "function logWrapper(val) { console.log('start'); console.log(val); console.log('end'); }\nfunction foo(x) { logWrapper(x); }\nfunction bar(y) { logWrapper(y); }"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Deep Architecture Benchmark",
+  "description": "Evaluates a model's ability to produce high‑level system designs and database schemas.",
+  "source": "builtin"
+}

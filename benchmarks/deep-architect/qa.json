@@ -1,0 +1,10 @@
+{
+  "questions": [
+    "Design a high‑level architecture for a multi‑tenant SaaS billing platform, describing the main services and data flow.",
+    "Outline the database schema (tables/relationships) for a subscription management system supporting plans, users, and payments."
+  ],
+  "answers": [
+    "A possible architecture: front‑end (React) → API gateway (NestJS) → microservices: Auth, Billing, Notification; each service communicates via message bus (Kafka); data stored in PostgreSQL for transactional data, Redis for caching, Stripe for payment processing; use CI/CD pipelines, observability via Prometheus/Grafana.",
+    "Tables: users (id, email, ...), plans (id, name, price, interval), subscriptions (id, user_id, plan_id, start_date, end_date, status), payments (id, subscription_id, amount, currency, status, created_at). Relationships: users 1‑M subscriptions, plans 1‑M subscriptions, subscriptions 1‑M payments."
+  ]
+}

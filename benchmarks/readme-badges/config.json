@@ -1,0 +1,5 @@
+{
+  "name": "README Badges Benchmark",
+  "description": "Update tech‑stack badges in a README based on the latest package versions (npm, GitHub Actions, Docker).",
+  "source": "builtin"
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Dependency Upgrade Benchmark",
+  "description": "Identify outdated npm packages from a dependency list and provide the latest version badge or command to update.",
+  "source": "builtin"
+}

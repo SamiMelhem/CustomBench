@@ -1,0 +1,10 @@
+{
+  "questions": [
+    "Write a JavaScript function that adds two numbers.",
+    "Write a Python function that returns the square of a number."
+  ],
+  "answers": [
+    "function add(a, b) { return a + b; }",
+    "def square(x):\n    return x * x"
+  ]
+}

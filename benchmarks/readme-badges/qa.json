@@ -1,0 +1,12 @@
+{
+  "questions": [
+    "Given a package.json with \"express\": \"4.18.2\", write the markdown badge for npm version (shields.io) that reflects the latest version of express.",
+    "Write the GitHub Actions workflow badge markdown for a workflow named \"ci\" in repository user/repo.",
+    "Create a Docker Hub pull count badge for the image \"node\"."
+  ],
+  "answers": [
+    "![npm](https://img.shields.io/npm/v/express)",
+    "![GitHub Workflow Status](https://github.com/user/repo/actions/workflows/ci.yml/badge.svg)",
+    "![Docker Pulls](https://img.shields.io/docker/pulls/library/node)"
+  ]
+}

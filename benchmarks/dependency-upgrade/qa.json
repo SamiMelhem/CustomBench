@@ -1,0 +1,12 @@
+{
+  "questions": [
+    "List the latest version of the npm package \"lodash\".",
+    "What command updates all outdated dependencies in a npm project?",
+    "Give a badge markdown showing the latest version of \"react\"."
+  ],
+  "answers": [
+    "npm view lodash version",
+    "npm update",
+    "![npm](https://img.shields.io/npm/v/react)"
+  ]
+}

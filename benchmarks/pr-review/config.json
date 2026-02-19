@@ -1,0 +1,5 @@
+{
+  "name": "PR Review Benchmark",
+  "description": "Tasks that test a model's ability to spot security issues and simple bugs in code diff snippets.",
+  "source": "builtin"
+}

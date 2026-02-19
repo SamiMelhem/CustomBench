@@ -1,0 +1,10 @@
+{
+  "questions": [
+    "Review this code snippet and point out any security issue: const query = \"SELECT * FROM users WHERE name='\" + req.body.name + \"'\";",
+    "Identify the bug in this TypeScript function: function foo(bar: any) { return bar.baz; }"
+  ],
+  "answers": [
+    "The query is vulnerable to SQL injection. Use parameterized queries.",
+    "If bar is undefined, accessing baz will throw an error. Add a null check or proper typing."
+  ]
+}

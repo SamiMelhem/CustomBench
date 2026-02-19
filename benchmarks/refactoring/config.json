@@ -1,0 +1,5 @@
+{
+  "name": "Refactoring Benchmark",
+  "description": "Tasks that require transforming existing code into cleaner, more idiomatic forms (e.g., loops → map, var → const, extracting functions).",
+  "source": "builtin"
+}
